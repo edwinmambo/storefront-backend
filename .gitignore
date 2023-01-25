@@ -1,0 +1,11 @@
+# editor files
+.vscode/
+
+# node_modules
+node_modules/
+
+# environment variables
+.env
+
+# dist folder
+dist/
