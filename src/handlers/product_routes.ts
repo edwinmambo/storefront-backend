@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Product, ProductStore } from '../models/product';
+import jwt from 'jsonwebtoken';
 
 const store = new ProductStore();
 
@@ -26,6 +27,15 @@ const showProduct = async (req: Request, res: Response) => {
 
 const createProduct = async (req: Request, res: Response) => {
   try {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token || '', process.env.TOKEN_SECRET || '');
+  } catch (err) {
+    res.status(401);
+    res.json('Access denied, invalid token');
+    return;
+  }
+  try {
     const newProduct: Product = req.body;
     const product: Product = await store.create(newProduct);
     res.json(product);
@@ -36,6 +46,15 @@ const createProduct = async (req: Request, res: Response) => {
 };
 
 const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token || '', process.env.TOKEN_SECRET || '');
+  } catch (err) {
+    res.status(401);
+    res.json('Access denied, invalid token');
+    return;
+  }
   try {
     const id = req.params.id;
     const deletedProduct: Product = await store.delete(id);
