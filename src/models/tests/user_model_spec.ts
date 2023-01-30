@@ -2,7 +2,7 @@ import { User, UserStore } from '../user';
 
 const store = new UserStore();
 
-fdescribe('User Model', () => {
+describe('User Model', () => {
   // index
   it('should have an index method', () => {
     expect(store.index).toBeDefined();
@@ -25,14 +25,12 @@ fdescribe('User Model', () => {
   });
   it('create method should add a user', async () => {
     const result = await store.create({
-      firstName: 'Test',
-      lastName: 'User',
+      username: 'Test User',
       password: 'password',
     });
     expect(result).toEqual({
       id: '1',
-      firstName: 'Test',
-      lastName: 'User',
+      username: 'Test User',
       password: 'password',
     });
   });
@@ -42,8 +40,7 @@ fdescribe('User Model', () => {
     expect(result).toEqual([
       {
         id: 1,
-        firstName: 'Test',
-        lastName: 'User',
+        username: 'Test User',
         password: 'password',
       },
     ]);
@@ -53,8 +50,7 @@ fdescribe('User Model', () => {
     const result = await store.show('1');
     expect(result).toEqual({
       id: '1',
-      firstName: 'Test',
-      lastName: 'User',
+      username: 'Test User',
       password: 'password',
     });
   });
