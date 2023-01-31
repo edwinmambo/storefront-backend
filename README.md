@@ -1,11 +1,13 @@
 # Storefront Backend Project
 
-## Getting Started
+## Introduction
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+This repo contains a storefront backend api that connects to the database for communication with the frontend. The API needs are stated in `REQUIREMENTS.md`
 
 ## Required Technologies
-Your application must make use of the following libraries:
+
+This application makes use of the following libraries:
+
 - Postgres for the database
 - Node/Express for the application logic
 - dotenv from npm for managing environment variables
@@ -13,42 +15,80 @@ Your application must make use of the following libraries:
 - jsonwebtoken from npm for working with JWTs
 - jasmine from npm for testing
 
-## Steps to Completion
+## Setup
 
-### 1. Plan to Meet Requirements
+1. ### Get the project locally
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API. 
+   Clone the project here on github
 
-Your first task is to read the requirements and update the document with the following:
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.    
-**Example**: A SHOW route: 'blogs/:id' [GET] 
+   ```bash
+   git clone https://github.com/edwinmambo/storefront-backend.git
+   ```
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.   
-**Example**: You can format this however you like but these types of information should be provided
-Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+2. ### Satisfy the following prerequisites
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape. 
+   - Have docker installed
+   - I use yarn as the package manager
+   - create an `.env` in file with the following variables:
 
-### 2.  DB Creation and Migrations
+   ```text
+   POSTGRES_HOST
+   POSTGRES_DB
+   POSTGRES_TEST_DB
+   POSTGRES_USER
+   POSTGRES_PASSWORD
+   ENV
+   BCRYPT_PASSWORD
+   SALT_ROUNDS
+   TOKEN_SECRET
+   ```
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder. 
+   The default values I use are the following:
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+   - host: 127.0.0.1
+   - db: full_stack_dev
+   - test db: full_stack_dev_test
+   - user: full_stack_user
+   - password: password123
+   - env: dev
 
-### 3. Models
+   **NOTE:** bcrypt password, salt rounds and token secret are of your own choosing.
 
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
+3. ### Install the dependencies
 
-### 4. Express Handlers
+   ```bash
+   npm install --global yarn
+   yarn
+   ```
 
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled. 
+4. ### Set up db
 
-### 5. JWTs
+   ```bash
+   # runs on port 5432
+   docker compose up
+   ```
 
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
+5. ### Run the api
 
-### 6. QA and `README.md`
+   ```bash
+   # In a separate terminal
+   yarn watch
+   ```
 
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
+6. ### Testing
 
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+   ```bash
+   yarn test
+   ```
+
+## Usage
+
+The server will run on `localhost:3000/` or `0.0.0.0:3000` where the api will be under the specific endpoint as in `REQUIREMENTS.md`
+
+## Examples
+
+`http:localhost:3000/products`
+
+`http:localhost:3000/users`
+
+`http:localhost:3000/orders`
