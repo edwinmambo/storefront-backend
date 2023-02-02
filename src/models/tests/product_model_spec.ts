@@ -35,7 +35,7 @@ describe('Product Model', () => {
         price: 20,
         category: 'general',
       });
-    }, 5000);
+    }, 10000);
   });
 
   it('index method should return a list of products', async () => {
@@ -61,7 +61,7 @@ describe('Product Model', () => {
         price: 20,
         category: 'general',
       });
-    }, 5000);
+    }, 10000);
   });
 
   it('update method should modify the correct product', async () => {
@@ -77,12 +77,12 @@ describe('Product Model', () => {
         price: 25,
         category: 'books',
       });
-    }, 5000);
+    }, 10000);
   });
 
   it('delete method should remove the product', async () => {
     setTimeout(async () => {
-      store.deleteProduct(1);
+      const _ = await store.deleteProduct(1);
       const result = await store.getProducts();
 
       expect(result).toEqual([]);

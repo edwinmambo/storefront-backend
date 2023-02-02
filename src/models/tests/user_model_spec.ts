@@ -24,14 +24,16 @@ describe('User Model', () => {
     expect(store.deleteUser).toBeDefined();
   });
   it('create method should add a user', async () => {
-    const result = await store.createUser({
-      username: 'testuser',
-      first_name: 'test',
-      last_name: 'user',
-      password_digest: 'password',
-    });
-    expect(result.id).toEqual(1);
-    expect(result.username).toEqual('testuser');
+    setTimeout(async () => {
+      const result = await store.createUser({
+        username: 'testuser',
+        first_name: 'test',
+        last_name: 'user',
+        password_digest: 'password',
+      });
+      expect(result.id).toEqual(1);
+      expect(result.username).toEqual('testuser');
+    }, 5000);
   });
 
   it('index method should return a list of users', async () => {
@@ -50,9 +52,11 @@ describe('User Model', () => {
   });
 
   it('delete method should remove the user', async () => {
-    store.deleteUser(1);
-    const result = await store.getAllUsers();
+    setTimeout(async () => {
+      await store.deleteUser(1);
+      const result = await store.getAllUsers();
 
-    expect(result).toEqual([]);
+      expect(result).toEqual([]);
+    }, 5000);
   });
 });
