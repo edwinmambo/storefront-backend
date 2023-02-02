@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "test": "set ENV=test && npx tsc && db-migrate --env test up && jasmine-ts && db-migrate db:drop test",
+    "test": "set ENV=test && echo $ENV && npx tsc && db-migrate --env test up && jasmine-ts && db-migrate db:drop test",
     "tsc": "tsc"
   },
   "author": "Edwin Mambo",
@@ -19,9 +19,9 @@
     "db-migrate-pg": "^1.2.2",
     "dotenv": "^16.0.3",
     "express": "^4.17.1",
-    "jasmine": "^4.5.0",
-    "jasmine-spec-reporter": "^7.0.0",
-    "jasmine-ts": "^0.4.0",
+    "jasmine": "^3.6.4",
+    "jasmine-spec-reporter": "^6.0.0",
+    "jasmine-ts": "^0.3.0",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.5.1",
     "ts-node": "^10.9.1",

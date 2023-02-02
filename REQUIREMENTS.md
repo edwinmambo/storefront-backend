@@ -31,33 +31,32 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 - id
 - name
-- price
-- [OPTIONAL] category
+- price default 0.00
+- [OPTIONAL] category default 'general'
 
 ##### Products schema
 
-|         id         |     name     |  price  |   category   |
-| :----------------: | :----------: | :-----: | :----------: |
-| SERIAL PRIMARY KEY | VARCHAR(100) | INTEGER | VARCHAR(100) |
+|         id         |     name     |  price  |  category   |
+| :----------------: | :----------: | :-----: | :---------: |
+| SERIAL PRIMARY KEY | VARCHAR(100) | NUMERIC | VARCHAR(50) |
 
 #### User
 
 - id
+- username
 - firstName
 - lastName
 - password
 
 ##### Users schema
 
-|         id         |   username   | password  |
-| :----------------: | :----------: | :-------: |
-| SERIAL PRIMARY KEY | VARCHAR(100) | VARCHAR() |
+|         id         | username |  first_name  |  last_name   | password_digest |
+| :----------------: | :------: | :----------: | :----------: | :-------------: |
+| SERIAL PRIMARY KEY | VARCHAR  | VARCHAR(100) | VARCHAR(100) |     VARCHAR     |
 
 #### Orders
 
 - id
-- id of each product in the order
-- quantity of each product in the order
 - user_id
 - status of order (active or complete)
 
@@ -65,7 +64,14 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 |         id         |            user_id             | status_of_order |
 | :----------------: | :----------------------------: | :-------------: |
-| SERIAL PRIMARY KEY | INTEGER (FOREIGN KEY to USERS) |     BOOLEAN     |
+| SERIAL PRIMARY KEY | INTEGER (FOREIGN KEY to USERS) |   VARCHAR(10)   |
+
+#### Order Products
+
+- id
+- order_id
+- product_id id of each product in the order
+- quantity of each product in the order
 
 ##### Order-products schema
 

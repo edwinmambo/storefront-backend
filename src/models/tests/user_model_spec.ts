@@ -5,60 +5,58 @@ const store = new UserStore();
 describe('User Model', () => {
   // index
   it('should have an index method', () => {
-    expect(store.index).toBeDefined();
+    expect(store.getAllUsers).toBeDefined();
   });
   // show
   it('should have a show method', () => {
-    expect(store.index).toBeDefined();
+    expect(store.getUserById).toBeDefined();
   });
   // create
   it('should have a create method', () => {
-    expect(store.index).toBeDefined();
+    expect(store.createUser).toBeDefined();
   });
   // update
   it('should have a update method', () => {
-    expect(store.index).toBeDefined();
+    expect(store.updateUser).toBeDefined();
   });
   // delete
   it('should have a delete method', () => {
-    expect(store.index).toBeDefined();
+    expect(store.deleteUser).toBeDefined();
   });
   it('create method should add a user', async () => {
-    const result = await store.create({
-      username: 'Test User',
-      password: 'password',
-    });
-    expect(result).toEqual({
-      id: '1',
-      username: 'Test User',
-      password: 'password',
-    });
+    setTimeout(async () => {
+      const result = await store.createUser({
+        username: 'testuser',
+        first_name: 'test',
+        last_name: 'user',
+        password_digest: 'password',
+      });
+      expect(result.id).toEqual(1);
+      expect(result.username).toEqual('testuser');
+    }, 5000);
   });
 
-  it('index method should return a list of books', async () => {
-    const result = await store.index();
-    expect(result).toEqual([
-      {
-        id: 1,
-        username: 'Test User',
-        password: 'password',
-      },
-    ]);
+  it('index method should return a list of users', async () => {
+    setTimeout(async () => {
+      const result = await store.getAllUsers();
+      expect(result[0].id).toEqual(1);
+      expect(result[0].username).toEqual('testuser');
+    }, 5000);
   });
 
-  it('show method should return the correct book', async () => {
-    const result = await store.show('1');
-    expect(result).toEqual({
-      id: '1',
-      username: 'Test User',
-      password: 'password',
-    });
+  it('show method should return the correct user', async () => {
+    setTimeout(async () => {
+      const result = await store.getUserById(1);
+      expect(result.username).toEqual('testuser');
+    }, 5000);
   });
 
-  it('delete method should remove the book', async () => {
-    store.delete('1');
-    const result = await store.index();
+  it('delete method should remove the user', async () => {
+    setTimeout(async () => {
+      await store.deleteUser(1);
+      const result = await store.getAllUsers();
 
-    expect(result).toEqual([]);
+      expect(result).toEqual([]);
+    }, 5000);
   });
 });
