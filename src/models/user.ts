@@ -92,7 +92,7 @@ export class UserStore {
 
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Could not add new user ${u.username}. Error ${err}`);
+      throw new Error(`Could not update user ${u.username}. Error ${err}`);
     }
   }
 
