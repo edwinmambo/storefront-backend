@@ -1,9 +1,19 @@
 import { Application, Request, Response } from 'express';
 import { Order, OrderStore } from '../models/order';
+import jwt from 'jsonwebtoken';
 
 const store = new OrderStore();
 
-const getAllOrders = async (_req: Request, res: Response) => {
+const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token as string, process.env.TOKEN_SECRET as string);
+  } catch (err) {
+    res.status(401);
+    res.json(`Access denied, invalid token. Error ${err}`);
+    return;
+  }
   const orders: Order[] = await store.getAllOrders();
   try {
     res.status(200).json(orders);
@@ -15,6 +25,15 @@ const getAllOrders = async (_req: Request, res: Response) => {
 
 const getOrderById = async (req: Request, res: Response) => {
   try {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token as string, process.env.TOKEN_SECRET as string);
+  } catch (err) {
+    res.status(401);
+    res.json(`Access denied, invalid token. Error ${err}`);
+    return;
+  }
+  try {
     const order: Order = await store.getOrderById(+req.params.id);
     res.status(200).json(order);
   } catch (err) {
@@ -24,6 +43,15 @@ const getOrderById = async (req: Request, res: Response) => {
 };
 
 const createOrder = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token as string, process.env.TOKEN_SECRET as string);
+  } catch (err) {
+    res.status(401);
+    res.json(`Access denied, invalid token. Error ${err}`);
+    return;
+  }
   try {
     const newOrder: Order = {
       user_id: +req.body.user_id,
@@ -39,6 +67,15 @@ const createOrder = async (req: Request, res: Response) => {
 
 const updateOrder = async (req: Request, res: Response) => {
   try {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token as string, process.env.TOKEN_SECRET as string);
+  } catch (err) {
+    res.status(401);
+    res.json(`Access denied, invalid token. Error ${err}`);
+    return;
+  }
+  try {
     const order: Order = {
       id: +req.params.id,
       user_id: req.body.user_id,
@@ -53,6 +90,15 @@ const updateOrder = async (req: Request, res: Response) => {
 };
 
 const deleteOrder = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token as string, process.env.TOKEN_SECRET as string);
+  } catch (err) {
+    res.status(401);
+    res.json(`Access denied, invalid token. Error ${err}`);
+    return;
+  }
   try {
     const deletedOrder: Order = await store.deleteOrder(+req.params.id);
     res.status(200).json(deletedOrder);
