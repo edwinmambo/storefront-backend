@@ -1,8 +1,16 @@
 import { User, UserStore } from '../user';
+import supertest from 'supertest';
+import app from './index_spec';
 
+const endpoint = supertest(app);
 const store = new UserStore();
 
 describe('User Model', () => {
+  it('Test /users endpoint and its response code', async () => {
+    const userRequest = endpoint.get('/users');
+    expect((await userRequest).status).toBe(401);
+  });
+
   // index
   it('should have an index method', () => {
     expect(store.getAllUsers).toBeDefined();
@@ -25,7 +33,7 @@ describe('User Model', () => {
   });
   it('create method should add a user', async () => {
     setTimeout(async () => {
-      const result = await store.createUser({
+      const result: User = await store.createUser({
         username: 'testuser',
         first_name: 'test',
         last_name: 'user',
@@ -38,7 +46,7 @@ describe('User Model', () => {
 
   it('index method should return a list of users', async () => {
     setTimeout(async () => {
-      const result = await store.getAllUsers();
+      const result: User[] = await store.getAllUsers();
       expect(result[0].id).toEqual(1);
       expect(result[0].username).toEqual('testuser');
     }, 5000);
@@ -46,17 +54,17 @@ describe('User Model', () => {
 
   it('show method should return the correct user', async () => {
     setTimeout(async () => {
-      const result = await store.getUserById(1);
+      const result: User = await store.getUserById(1);
       expect(result.username).toEqual('testuser');
     }, 5000);
   });
 
   it('delete method should remove the user', async () => {
     setTimeout(async () => {
-      await store.deleteUser(1);
+      const _: User = await store.deleteUser(1);
       const result = await store.getAllUsers();
 
       expect(result).toEqual([]);
-    }, 5000);
+    }, 10000);
   });
 });

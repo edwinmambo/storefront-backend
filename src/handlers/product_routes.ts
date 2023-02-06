@@ -28,6 +28,19 @@ const getProductById = async (req: Request, res: Response) => {
 
 const createProduct = async (req: Request, res: Response) => {
   try {
+    if (!req.body.name) {
+      return res.status(400).json({ error: 'Product name is required' });
+    }
+
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token as string, process.env.TOKEN_SECRET as string);
+  } catch (err) {
+    res.status(401);
+    res.json(`Access denied, invalid token. Error ${err}`);
+    return;
+  }
+  try {
     const newProduct: Product = req.body;
     const product: Product = await store.createProduct(newProduct);
     res.status(201).json(product);
@@ -38,6 +51,15 @@ const createProduct = async (req: Request, res: Response) => {
 };
 
 const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token as string, process.env.TOKEN_SECRET as string);
+  } catch (err) {
+    res.status(401);
+    res.json('Access denied, invalid token');
+    return;
+  }
   try {
     const newProduct: Product = {
       id: +req.params.id,
@@ -55,6 +77,15 @@ const updateProduct = async (req: Request, res: Response) => {
 };
 
 const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token as string, process.env.TOKEN_SECRET as string);
+  } catch (err) {
+    res.status(401);
+    res.json('Access denied, invalid token');
+    return;
+  }
   try {
     const deletedProduct: Product = await store.deleteProduct(+req.params.id);
     res.status(200).json(deletedProduct);

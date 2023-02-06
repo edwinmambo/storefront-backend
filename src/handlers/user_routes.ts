@@ -34,7 +34,8 @@ const createUser = async (req: Request, res: Response) => {
 
   try {
     const newUser: User = await store.createUser(user);
-    let token = jwt.sign({ user: newUser }, process.env.TOKEN_SECRET as string);
+    let token = jwt.sign(newUser, process.env.TOKEN_SECRET as string);
+    console.log(token);
     res.status(201).json(token);
   } catch (err: any) {
     res.status(400);
@@ -51,23 +52,25 @@ const updateUser = async (req: Request, res: Response) => {
     password_digest: req.body.password_digest,
   };
 
-  // try {
-  //   const authorizationHeader = req.headers.authorization;
-  //   const token = authorizationHeader?.split(' ')[1];
-  //   const decoded: any = jwt.verify(
-  //     token as string,
-  //     process.env.TOKEN_SECRET as string
-  //   );
-  //   if (decoded.id !== user.id) {
-  //     throw new Error('User id does not match!');
-  //   }
-  // } catch (err) {
-  //   res.status(401);
-  //   res.json(err);
-  //   return;
-  // }
   try {
-    const updated = await store.updateUser(user);
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    const decoded: any = jwt.verify(
+      token as string,
+      process.env.TOKEN_SECRET as string
+    );
+    console.log(user.id, decoded.id);
+    console.log(decoded);
+    if (decoded.id !== user.id) {
+      throw new Error('User id does not match!');
+    }
+  } catch (err) {
+    res.status(401);
+    res.json(err);
+    return;
+  }
+  try {
+    const updated: User = await store.updateUser(user);
     res.status(201).json(updated);
   } catch (err: any) {
     res.status(400);
