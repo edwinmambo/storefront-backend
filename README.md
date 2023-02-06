@@ -28,7 +28,14 @@ This application makes use of the following libraries:
 2. ### Satisfy the following prerequisites
 
    - Have docker installed
-   - I use yarn as the package manager
+
+   ```bash
+   #check if docker and docker compose are installed
+   docker version
+   docker compose version
+   ```
+
+   - I use `yarn` as the package manager
    - create an `.env` in file with the following variables:
 
    ```text
@@ -63,9 +70,35 @@ This application makes use of the following libraries:
 
 4. ### Set up db
 
+   For both the dev and test environments:
+
+   Run the container from `docker-compose.yml`
+
    ```bash
    # runs on port 5432
    docker compose up
+   ```
+
+   Connect to the container and run the following to setup the database (_Use values in your `.env` file_):
+
+   **Create a user**
+
+   ```bash(psql)
+   CREATE USER full_stack_user WITH PASSWORD 'Password123';
+   ```
+
+   **Create Databases**
+
+   ```bash(psql)
+   CREATE DATABASE full_stack_dev;
+   CREATE DATABASE full_stack_dev_test;
+   ```
+
+   **Grant all privileges on both databases to user**
+
+   ```bash(psql)
+   GRANT ALL PRIVILEGES ON DATABASE full_stack_dev TO full_stack_user;
+   GRANT ALL PRIVILEGES ON DATABASE full_stack_dev_test TO full_stack_user;
    ```
 
 5. ### Run the api
@@ -87,8 +120,8 @@ The server will run on `localhost:3000/` or `0.0.0.0:3000` where the api will be
 
 ## Examples
 
-`http:localhost:3000/products`
+Products: &nbsp; `http:localhost:3000/products`
 
-`http:localhost:3000/users`
+Users: &emsp; `http:localhost:3000/users`
 
-`http:localhost:3000/orders`
+Orders: &emsp; `http:localhost:3000/orders`
