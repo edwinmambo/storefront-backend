@@ -1,8 +1,16 @@
 import { Order, OrderStore } from '../order';
+import supertest from 'supertest';
+import app from './index_spec';
 
+const endpoint = supertest(app);
 const store = new OrderStore();
 
 describe('Order Model', () => {
+  it('Test /orders endpoint and its response code', async () => {
+    const orderRequest = endpoint.get('/orders');
+    expect((await orderRequest).status).toBe(401);
+  });
+
   // index
   it('should have an index method', () => {
     expect(store.getAllOrders).toBeDefined();
@@ -25,7 +33,7 @@ describe('Order Model', () => {
   });
   it('create method should add an order', async () => {
     setTimeout(async () => {
-      const result = await store.createOrder({
+      const result: Order = await store.createOrder({
         user_id: 1,
         status_of_order: 'active',
       });
@@ -39,7 +47,7 @@ describe('Order Model', () => {
 
   it('index method should return a list of orders', async () => {
     setTimeout(async () => {
-      const result = await store.getAllOrders();
+      const result: Order[] = await store.getAllOrders();
       expect(result).toEqual([
         {
           id: 1,
@@ -52,7 +60,7 @@ describe('Order Model', () => {
 
   it('show method should return the correct order', async () => {
     setTimeout(async () => {
-      const result = await store.getOrderById(1);
+      const result: Order = await store.getOrderById(1);
       expect(result).toEqual({
         id: 1,
         user_id: 1,
@@ -63,7 +71,7 @@ describe('Order Model', () => {
 
   it('update method should update the correct order', async () => {
     setTimeout(async () => {
-      const result = await store.updateOrder({
+      const result: Order = await store.updateOrder({
         user_id: 1,
         status_of_order: 'complete',
       });
@@ -77,7 +85,7 @@ describe('Order Model', () => {
 
   it('delete method should remove the order', async () => {
     setTimeout(async () => {
-      const _ = await store.deleteOrder(1);
+      const _: Order = await store.deleteOrder(1);
       const result = await store.getAllOrders();
 
       expect(result).toEqual([]);

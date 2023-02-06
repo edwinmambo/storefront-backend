@@ -1,8 +1,16 @@
 import { Product, ProductStore } from '../product';
+import supertest from 'supertest';
+import app from './index_spec';
 
+const endpoint = supertest(app);
 const store = new ProductStore();
 
 describe('Product Model', () => {
+  it('Test /product endpoint and its response code', async () => {
+    const productRequest = endpoint.get('/products');
+    expect((await productRequest).status).toBe(400);
+  });
+
   // index
   it('should have an index method', () => {
     expect(store.getProducts).toBeDefined();
@@ -25,7 +33,7 @@ describe('Product Model', () => {
   });
   it('create method should add a product', async () => {
     setTimeout(async () => {
-      const result = await store.createProduct({
+      const result: Product = await store.createProduct({
         name: 'Book',
         price: 20,
       });
@@ -40,7 +48,7 @@ describe('Product Model', () => {
 
   it('index method should return a list of products', async () => {
     setTimeout(async () => {
-      const result = await store.getProducts();
+      const result: Product[] = await store.getProducts();
       expect(result).toEqual([
         {
           id: 1,
@@ -54,7 +62,7 @@ describe('Product Model', () => {
 
   it('show method should return the correct product', async () => {
     setTimeout(async () => {
-      const result = await store.getProductsById(1);
+      const result: Product = await store.getProductsById(1);
       expect(result).toEqual({
         id: 1,
         name: 'Book',
@@ -66,7 +74,7 @@ describe('Product Model', () => {
 
   it('update method should modify the correct product', async () => {
     setTimeout(async () => {
-      const result = await store.updateProduct({
+      const result: Product = await store.updateProduct({
         name: 'Book',
         price: 25,
         category: 'books',
@@ -82,7 +90,7 @@ describe('Product Model', () => {
 
   it('delete method should remove the product', async () => {
     setTimeout(async () => {
-      const _ = await store.deleteProduct(1);
+      const _: Product = await store.deleteProduct(1);
       const result = await store.getProducts();
 
       expect(result).toEqual([]);
