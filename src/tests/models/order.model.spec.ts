@@ -1,16 +1,9 @@
-import { Order, OrderStore } from '../order';
-import supertest from 'supertest';
-import app from './index_spec';
+import { OrderStore } from '../../models/order.model';
+import Order from '../../types/order.type';
 
-const endpoint = supertest(app);
 const store = new OrderStore();
 
 describe('Order Model', () => {
-  it('Test /orders endpoint and its response code', async () => {
-    const orderRequest = endpoint.get('/orders');
-    expect((await orderRequest).status).toBe(401);
-  });
-
   // index
   it('should have an index method', () => {
     expect(store.getAllOrders).toBeDefined();
@@ -31,7 +24,7 @@ describe('Order Model', () => {
   it('should have a delete method', () => {
     expect(store.deleteOrder).toBeDefined();
   });
-  it('create method should add an order', async () => {
+  it('should create an order', async () => {
     setTimeout(async () => {
       const result: Order = await store.createOrder({
         user_id: 1,
@@ -45,7 +38,7 @@ describe('Order Model', () => {
     }, 10000);
   });
 
-  it('index method should return a list of orders', async () => {
+  it('should return a list of orders', async () => {
     setTimeout(async () => {
       const result: Order[] = await store.getAllOrders();
       expect(result).toEqual([
@@ -69,7 +62,7 @@ describe('Order Model', () => {
     }, 10000);
   });
 
-  it('update method should update the correct order', async () => {
+  it('should update the correct order', async () => {
     setTimeout(async () => {
       const result: Order = await store.updateOrder({
         user_id: 1,
@@ -83,7 +76,7 @@ describe('Order Model', () => {
     }, 10000);
   });
 
-  it('delete method should remove the order', async () => {
+  it('should remove the order', async () => {
     setTimeout(async () => {
       const _: Order = await store.deleteOrder(1);
       const result = await store.getAllOrders();

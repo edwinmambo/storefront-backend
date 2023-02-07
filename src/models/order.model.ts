@@ -1,10 +1,5 @@
 import client from '../database';
-
-export type Order = {
-  id?: number;
-  user_id: number;
-  status_of_order: string;
-};
+import { Order } from '../types/index.type';
 
 export class OrderStore {
   // get all orders
@@ -49,6 +44,7 @@ export class OrderStore {
         o.status_of_order || 'active',
       ]);
       conn.release();
+
       return result.rows[0];
     } catch (err) {
       throw new Error(`Could not add new order ${o.id}. Error ${err}`);

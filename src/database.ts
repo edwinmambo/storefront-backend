@@ -12,11 +12,9 @@ const {
   ENV,
 } = process.env;
 
-let client: any;
-// console.log(ENV);
+let client: Pool | any;
 
 if (ENV === 'test') {
-  console.log(ENV);
   client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_TEST_DB,
@@ -27,6 +25,7 @@ if (ENV === 'test') {
 
 if (ENV === 'dev') {
   client = new Pool({
+    connectionTimeoutMillis: 20000,
     host: POSTGRES_HOST,
     database: POSTGRES_DB,
     user: POSTGRES_USER,

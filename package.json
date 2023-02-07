@@ -4,9 +4,9 @@
   "description": "A Node.js and Postgres Store Front Backend",
   "main": "server.ts",
   "scripts": {
-    "start": "node src/server.ts",
-    "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "test": "set ENV=test && echo $ENV && npx tsc && db-migrate --env test up && jasmine-ts && db-migrate db:drop test",
+    "start": "node src/index.ts",
+    "watch": "tsc-watch --esModuleInterop src/index.ts --outDir ./dist --onSuccess \"node ./dist/index.js\"",
+    "test": "set ENV=test && npx tsc && db-migrate --env test up && jasmine-ts && db-migrate db:drop test",
     "tsc": "tsc"
   },
   "author": "Edwin Mambo",

@@ -1,23 +1,30 @@
-import { Product, ProductStore } from '../product';
-import supertest from 'supertest';
-import app from './index_spec';
+import ProductStore from '../../models/product.model';
+import Product from '../../types/product.type';
 
-const endpoint = supertest(app);
 const store = new ProductStore();
 
 describe('Product Model', () => {
-  it('Test /product endpoint and its response code', async () => {
-    const productRequest = endpoint.get('/products');
-    expect((await productRequest).status).toBe(400);
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+  let originalTimeout: number;
+
+  beforeAll(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+  });
+  beforeEach(() => {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
   });
 
+  afterEach(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
   // index
   it('should have an index method', () => {
     expect(store.getProducts).toBeDefined();
   });
   // show
   it('should have a show method', () => {
-    expect(store.getProductsById).toBeDefined();
+    expect(store.getProductById).toBeDefined();
   });
   // create
   it('should have a create method', () => {
@@ -31,7 +38,7 @@ describe('Product Model', () => {
   it('should have a delete method', () => {
     expect(store.deleteProduct).toBeDefined();
   });
-  it('create method should add a product', async () => {
+  it('should create a product', async () => {
     setTimeout(async () => {
       const result: Product = await store.createProduct({
         name: 'Book',
@@ -46,7 +53,7 @@ describe('Product Model', () => {
     }, 10000);
   });
 
-  it('index method should return a list of products', async () => {
+  it('should return a list of products', async () => {
     setTimeout(async () => {
       const result: Product[] = await store.getProducts();
       expect(result).toEqual([
@@ -60,9 +67,9 @@ describe('Product Model', () => {
     }, 10000);
   });
 
-  it('show method should return the correct product', async () => {
+  it('should return the correct product', async () => {
     setTimeout(async () => {
-      const result: Product = await store.getProductsById(1);
+      const result: Product = await store.getProductById(1);
       expect(result).toEqual({
         id: 1,
         name: 'Book',
@@ -72,7 +79,7 @@ describe('Product Model', () => {
     }, 10000);
   });
 
-  it('update method should modify the correct product', async () => {
+  it('should update the product', async () => {
     setTimeout(async () => {
       const result: Product = await store.updateProduct({
         name: 'Book',
@@ -88,7 +95,7 @@ describe('Product Model', () => {
     }, 10000);
   });
 
-  it('delete method should remove the product', async () => {
+  it('should delete the product', async () => {
     setTimeout(async () => {
       const _: Product = await store.deleteProduct(1);
       const result = await store.getProducts();

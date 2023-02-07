@@ -1,16 +1,9 @@
 import client from '../database';
 import bcrypt from 'bcrypt';
+import { User } from '../types/index.type';
 
 const pepper = process.env.BCRYPT_PASSWORD;
 const saltRounds = process.env.SALT_ROUNDS;
-
-export type User = {
-  id?: number;
-  username: string;
-  first_name?: string;
-  last_name?: string;
-  password_digest: string;
-};
 
 export class UserStore {
   // get all users
@@ -31,7 +24,7 @@ export class UserStore {
   // get one user
   async getUserById(id: number): Promise<User> {
     try {
-      const sql = 'SELECT * FROM users WHERE id=$1';
+      const sql = 'SELECT * FROM users WHERE id=($1)';
       const conn = await client.connect();
 
       const result = await conn.query(sql, [id]);
@@ -73,7 +66,7 @@ export class UserStore {
   async updateUser(u: User): Promise<User> {
     try {
       const sql =
-        'UPDATE users SET username=$2, first_name=$3, last_name=$4, password_digest=$5 WHERE id=$1 RETURNING *';
+        'UPDATE users SET username=($2), first_name=($3), last_name=($4), password_digest=($5) WHERE id=($1) RETURNING *';
       const conn = await client.connect();
 
       const hash = bcrypt.hashSync(
@@ -99,36 +92,15 @@ export class UserStore {
   // delete a user
   async deleteUser(id: number): Promise<User> {
     try {
-      const sql = 'DELETE FROM users WHERE id=$1 RETURNING *';
+      const sql = 'DELETE FROM users WHERE id=($1) RETURNING *';
       const conn = await client.connect();
 
       const result = await conn.query(sql, [id]);
-      const user = result.rows[0];
       conn.release();
-      return user;
+
+      return result.rows[0];
     } catch (err) {
       throw new Error(`Could not delete user ${id}. Error: ${err}`);
     }
-  }
-
-  // authenticate a user
-  async authenticate(username: string, password: string): Promise<User | null> {
-    const sql = 'SELECT password_digest FROM users WHERE username=$1';
-
-    const conn = await client.connect();
-    const result = await conn.query(sql, [username]);
-
-    console.log(password + pepper);
-
-    if (result.rows.length) {
-      const user = result.rows[0];
-
-      console.log(user);
-
-      if (bcrypt.compareSync(password + pepper, user.password_digest)) {
-        return user;
-      }
-    }
-    return null;
   }
 }
