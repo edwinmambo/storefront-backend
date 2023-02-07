@@ -34,8 +34,7 @@ export default class UserController {
 
     try {
       const newUser: User = await store.createUser(user);
-      let token = jwt.sign(newUser, process.env.TOKEN_SECRET as string);
-      console.log(token);
+      const token = jwt.sign(newUser, process.env.TOKEN_SECRET as string);
       res.status(201).json(token);
     } catch (err: any) {
       res.status(400).json(err + user);
